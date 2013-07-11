@@ -7,9 +7,9 @@
 (defn get-feed [url credentials]
   (parse-feed ((client/get url {:basic-auth credentials :as :stream}) :body)))
 
-(defn interesting-url-parts [url] 
-    ;; little awkward - look up url templating libraries for clojure 
-    (let [[_ right-part] (re-find #"pipeline/(.*)" url)] 
+(defn interesting-url-parts [url]
+    ;; little awkward - look up url templating libraries for clojure
+    (let [[_ right-part] (re-find #"pipelines/(.*)" url)]
       (clojure.string/split right-part #"/")))
 
 (defn url-to-feed-data [url]
