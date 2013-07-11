@@ -11,7 +11,7 @@
        ["-p" "--password"]))
 
 (defn go-args->go-feed-args [go-args]
-  [(first (go-args 1)) ((go-args 0) :server) ((go-args 0) :username) ((go-args 0) :password)])
+  (flatten [(first (go-args 1)) (map (go-args 0) [:server :username :password])]))
 
 (defn -main [& args]
   (println (apply go-feed (go-args->go-feed-args (args->go-args args)))))
