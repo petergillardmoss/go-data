@@ -7,15 +7,19 @@
 (defn get-feed [url credentials]
   (parse-feed ((client/get url {:basic-auth credentials :as :stream}) :body)))
 
+(defn interesting-url-parts [url] 
+    ;; little awkward - look up url templating libraries for clojure 
+    (let [[_ right-part] (re-find #"pipeline/(.*)" url)] 
+      (clojure.string/split right-part #"/")))
+
+(defn url-to-feed-data [url]
+  (->
+   (zipmap [:pipeline :pipeline-counter :stage :stage-counter] (interesting-url-parts url))
+   (update-in [:pipeline-counter] #(Integer/parseInt %))
+   (update-in [:stage-counter] #(Integer/parseInt %))))
+
 (defn transform [feed]
-  (let [fix (fn [h] (assoc h
-                      :pipeline-counter (read-string (h :pipeline-counter))
-                      :stage-counter (read-string (h :stage-counter))))]
-    (into []
-          (map #(fix(zipmap
-                     [:pipeline :pipeline-counter :stage :stage-counter]
-                     (split (last (split (% :uri) #"pipelines/")) #"/")))
-               (feed :entries)))))
+    (map url-to-feed-data (map :uri (feed :entries))))
 
 (defn go-feed
   [pipeline server username password]
