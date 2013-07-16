@@ -28,7 +28,12 @@
   [server pipeline]
   (str "https://" server "/go/pipelines/value_stream_map/" (pipeline :pipeline)  "/" (pipeline :pipeline-counter)  ".json"))
 
+(defn latest-pipeline
+  [feed]
+  (first (last (last feed))))
+
 (defn go-feed
   [pipeline server username password]
-  (group-feed
-   (transform (get-feed (str "https://" server "/go/api/pipelines/" pipeline "/stages.xml") [username password]))))
+  (latest-pipeline (group-feed
+                    (transform
+                     (get-feed (str "https://" server "/go/api/pipelines/" pipeline "/stages.xml") [username password])))))

@@ -21,6 +21,13 @@
                {:pipeline-counter 2 :stage "build"}]}
            (group-feed transformed-feed)))))
 
+(deftest gets-latest-pipeline-from-feed
+  (let [feed {2 [{:pipeline-counter 2 :pipeline "mypipeline"}
+            {:pipeline-counter 2 :pipeline "mypipeline"}]
+            1 [{:pipeline-counter 1 :pipeline "mypipeline"}
+               {:pipeline-counter 1 :pipeline "mypipeline"}]}]
+    (is (= {:pipeline-counter 2, :pipeline "mypipeline"} (latest-pipeline feed)))))
+
 
 (deftest returns-url-for-valuestream
   (is (= "https://myserver/go/pipelines/value_stream_map/mypipeline/14.json"
