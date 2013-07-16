@@ -21,6 +21,10 @@
 (defn transform [feed]
     (map url-to-feed-data (map :uri (feed :entries))))
 
+(defn group-feed [transformed]
+  (group-by :pipeline-counter transformed))
+
 (defn go-feed
   [pipeline server username password]
-  (transform (get-feed (str "https://" server "/go/api/pipelines/" pipeline "/stages.xml") [username password])))
+  (group-feed
+   (transform (get-feed (str "https://" server "/go/api/pipelines/" pipeline "/stages.xml") [username password]))))

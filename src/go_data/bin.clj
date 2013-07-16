@@ -16,4 +16,6 @@
     (flatten [pipeline-name (map options [:server :username :password])])))
 
 (defn -main [& args]
-  (println (apply go-feed (go-args->go-feed-args (args->go-args args)))))
+  (let [feed-args (-> (args->go-args args)
+                      (go-args->go-feed-args))]
+       (println (apply go-feed feed-args))))

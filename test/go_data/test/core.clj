@@ -9,3 +9,14 @@
   (is (= [{:pipeline "pipeline-one" :pipeline-counter 93 :stage "test" :stage-counter 1}
           {:pipeline "pipeline-two" :pipeline-counter 13 :stage "build" :stage-counter 4}]
          (transform test-feed))))
+
+(deftest groups-a-feed-by-pipeline
+  (let [transformed-feed [{:pipeline-counter 1 :stage "test"}
+                          {:pipeline-counter 1 :stage "build"}
+                          {:pipeline-counter 2 :stage "integration"}
+                          {:pipeline-counter 2 :stage "build"}]]
+    (is (= {1 [{:pipeline-counter 1 :stage "test"}
+            {:pipeline-counter 1 :stage "build"}]
+            2 [{:pipeline-counter 2 :stage "integration"}
+               {:pipeline-counter 2 :stage "build"}]}
+           (group-feed transformed-feed)))))
