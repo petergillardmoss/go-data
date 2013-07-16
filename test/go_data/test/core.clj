@@ -20,3 +20,9 @@
             2 [{:pipeline-counter 2 :stage "integration"}
                {:pipeline-counter 2 :stage "build"}]}
            (group-feed transformed-feed)))))
+
+
+(deftest returns-url-for-valuestream
+  (is (= "https://myserver/go/pipelines/value_stream_map/mypipeline/14.json"
+      (valuestream-url "myserver" {:pipeline-counter 14,
+                                   :pipeline "mypipeline"}))))

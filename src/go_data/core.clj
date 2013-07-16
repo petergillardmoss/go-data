@@ -24,6 +24,10 @@
 (defn group-feed [transformed]
   (group-by :pipeline-counter transformed))
 
+(defn valuestream-url
+  [server pipeline]
+  (str "https://" server "/go/pipelines/value_stream_map/" (pipeline :pipeline)  "/" (pipeline :pipeline-counter)  ".json"))
+
 (defn go-feed
   [pipeline server username password]
   (group-feed
